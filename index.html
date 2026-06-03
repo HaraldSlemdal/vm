@@ -132,6 +132,11 @@
       background: rgba(255,255,255,.025);
     }
 
+    .day.today {
+      border-top: 2px solid var(--accent);
+      background: rgba(53, 208, 186, .06);
+    }
+    
     .day.empty { background: rgba(0,0,0,.12); }
 
     .date {
@@ -145,6 +150,12 @@
       margin-bottom: 8px;
       color: var(--text);
       background: rgba(255,255,255,.08);
+    }
+
+    .date.today {
+      background: var(--accent);
+      color: var(--bg);
+      box-shadow: 0 0 0 3px rgba(53, 208, 186, .35);
     }
 
     .match {
@@ -494,10 +505,20 @@
         const date = `${year}-${String(monthIndex + 1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
         const dateObj = new Date(year, monthIndex, day);
         const dayEl = document.createElement('div');
-        dayEl.className = 'day';
+        dayEl.className = 'day';  // ← sett klassen FØRST
         dayEl.dataset.weekday = weekdays[mondayFirstIndex(dateObj)];
-        dayEl.innerHTML = `<div class="date">${day}</div>`;
+        dayEl.innerHTML = `<div class="date">${day}</div>`;  // ← bygg innerHTML FØRST
 
+        const today = new Date();
+        const isToday = today.getFullYear() === year &&
+                today.getMonth() === monthIndex &&
+                today.getDate() === day;
+
+        if (isToday) {
+          dayEl.classList.add('today');                        // ← ETTER className er satt
+          dayEl.querySelector('.date').classList.add('today'); // ← ETTER innerHTML er satt
+        }
+        
         matches
           .filter(m => m.date === date)
           .sort((a,b) => a.time.localeCompare(b.time))
