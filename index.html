@@ -149,9 +149,8 @@
 
     .match {
       display: grid;
-      grid-template-columns: minmax(48px, auto) minmax(0, 1fr) auto;
-      gap: 7px;
-      align-items: start;
+      grid-template-columns: auto 1fr;  /* tid | kanal */
+      gap: 4px 7px;
       margin: 7px 0;
       padding: 9px;
       border-radius: 14px;
@@ -209,14 +208,22 @@
       z-index: 1;
     }
 
-    .match.norway .teams,
+    .match .teams {
+      grid-column: 1 / -1;  /* full bredde */
+      font-weight: 650;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    
     .match.norway .time {
       color: white;
       text-shadow: 0 1px 3px rgba(0,0,0,.45);
     }
 
-    .match.norway .meta {
-      color: rgba(255,255,255,.9);
+    .match .meta {
+      grid-column: 1 / -1;  /* full bredde */
+      color: var(--muted);
+      font-size: .76rem;
     }
 
     .time {
@@ -510,14 +517,11 @@
       el.dataset.channel = match.channel;
       el.dataset.norway = isNorway ? 'true' : 'false';
 
-      el.innerHTML = `
-        <span class="time">${match.time}</span>
-        <span>
-          <span class="teams">${match.teams}</span>
-          <div class="meta">${match.stage} · ${match.city}</div>
-        </span>${match.channel !== 'none' ? `
-        <span class="channel ${match.channel}">${formatChannel(match.channel)}</span>` : ''}
-      `;
+      el.innerHTML = `  <span class="time">${match.time}</span>
+  ${match.channel !== 'none'
+              ? `<span class="channel ${match.channel}">${formatChannel(match.channel)}</span>`
+              : `<span></span>`}  <span class="teams">${match.teams}</span>
+  <div class="meta">${match.stage} · ${match.city}</div>`;
       return el;
     }
 
