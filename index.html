@@ -72,6 +72,46 @@
       align-items: center;
     }
 
+    .controls-extra {
+      display: none;
+      border-top: 1px solid var(--line);
+      padding: 12px 20px;
+      background: rgba(7,17,31,.9);
+    }
+
+    .controls-extra.open {
+      display: block;
+    }
+
+    .controls-extra-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .controls-extra-inner label {
+      color: var(--muted);
+      font-size: .9rem;
+      white-space: nowrap;
+    }
+
+    .controls-extra-inner select {
+      flex: 1;
+      max-width: 400px;
+    }
+
+    button.settings-btn {
+      background: linear-gradient(135deg, var(--panel-2), var(--panel));
+    }
+
+    button.settings-btn.active {
+      background: linear-gradient(135deg, #1a3a5c, var(--panel-2));
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     input, select, button {
       border: 1px solid var(--line);
       background: var(--panel);
@@ -265,6 +305,21 @@
     .channel.NRK { background: var(--nrk); }
     .channel.TV2 { background: var(--tv2); }
 
+    .match.played .channel.NRK,
+    .match.played .channel.TV2 {
+      background: #1a1a1a;
+      color: #666;
+      border: 1px solid #333;
+    }
+
+    .match.played {
+      opacity: .45;
+    }
+
+    .match.played .time {
+      color: var(--muted);
+    }
+
     .summary {
       display: flex;
       gap: 10px;
@@ -342,7 +397,13 @@
       </select>
       <button id="norwayOnly">Vis bare NORGE</button>
       <button id="printBtn">Skriv ut / lag PDF</button>
-      <select id="tzSelect" style="min-width:260px"></select>
+      <button id="settingsBtn" class="settings-btn">⚙ Flere innstillinger</button>
+    </div>
+    <div class="controls-extra" id="controlsExtra">
+      <div class="controls-extra-inner">
+        <label for="tzSelect">🕐 Tidssone:</label>
+        <select id="tzSelect"></select>
+      </div>
     </div>
   </section>
 
@@ -350,6 +411,7 @@
 
   <script>
     const matches = [
+      ['2026-06-07','21:00','Marokko – NORGE','Privatlandskamp','New York','TV2'],
       ['2026-06-11','21:00','Mexico – Sør-Afrika','Gruppe A','Mexico City','TV2'],
       ['2026-06-12','04:00','Sør-Korea – Tsjekkia','Gruppe A','Guadalajara','NRK'],
       ['2026-06-12','21:00','Canada – Bosnia og Herzegovina','Gruppe B','Toronto','NRK'],
@@ -635,10 +697,19 @@
       container.appendChild(calendar);
     }
 
+    function isMatchPlayed(match) {
+      // Alle tider i datasettet er CEST (UTC+2). Legger til 115 min for kampvarighet.
+      const [h, m] = match.time.split(':').map(Number);
+      const [y, mo, d] = match.date.split('-').map(Number);
+      const kickoffUtcMs = Date.UTC(y, mo - 1, d, h - 2, m);
+      return Date.now() > kickoffUtcMs + 115 * 60 * 1000;
+    }
+
     function matchElement(match) {
       const isNorway = match.teams.includes('NORGE');
+      const played = isMatchPlayed(match);
       const el = document.createElement('article');
-      el.className = `match ${isNorway ? 'norway' : ''}`;
+      el.className = `match ${isNorway ? 'norway' : ''} ${played ? 'played' : ''}`.trim();
       el.dataset.search = `${match.teams} ${match.stage} ${match.city} ${formatChannel(match.channel)}`.toLowerCase();
       el.dataset.channel = match.channel;
       el.dataset.norway = isNorway ? 'true' : 'false';
@@ -686,6 +757,13 @@
       applyFilters();
     });
     document.getElementById('printBtn').addEventListener('click', () => window.print());
+    document.getElementById('settingsBtn').addEventListener('click', () => {
+      const extra = document.getElementById('controlsExtra');
+      const btn = document.getElementById('settingsBtn');
+      const isOpen = extra.classList.toggle('open');
+      btn.classList.toggle('active', isOpen);
+      btn.textContent = isOpen ? '⚙ Skjul innstillinger' : '⚙ Flere innstillinger';
+    });
 
     buildTzSelect();
     render();
