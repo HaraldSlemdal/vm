@@ -67,7 +67,7 @@
       max-width: 1400px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 1.5fr repeat(3, auto);
+      grid-template-columns: 1.5fr repeat(4, auto);
       gap: 12px;
       align-items: center;
     }
@@ -293,7 +293,7 @@
     }
 
     @media (max-width: 1050px) {
-      .controls-inner { grid-template-columns: 1fr 1fr; }
+      .controls-inner { grid-template-columns: 1fr 1fr 1fr; }
       .calendar { grid-template-columns: 1fr; }
       .weekday { display: none; }
       .day { min-height: auto; }
@@ -342,6 +342,7 @@
       </select>
       <button id="norwayOnly">Vis bare NORGE</button>
       <button id="printBtn">Skriv ut / lag PDF</button>
+      <select id="tzSelect" style="min-width:260px"></select>
     </div>
   </section>
 
@@ -459,11 +460,102 @@
     const monthNames = ['Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'];
     let norwayOnly = false;
 
+    // ── Tidssoner ──────────────────────────────────────────────────────────
+    const TIMEZONES = [
+      { tz: 'Pacific/Niue',                    name: 'Niue' },
+      { tz: 'Pacific/Pago_Pago',               name: 'Amerikansk Samoa' },
+      { tz: 'Pacific/Honolulu',                name: 'Hawaii' },
+      { tz: 'America/Anchorage',               name: 'Alaska' },
+      { tz: 'America/Los_Angeles',             name: 'Los Angeles / Seattle / Vancouver' },
+      { tz: 'America/Denver',                  name: 'Denver / Salt Lake City / Phoenix' },
+      { tz: 'America/Chicago',                 name: 'Chicago / Dallas / Houston / Kansas City' },
+      { tz: 'America/New_York',                name: 'New York / Boston / Miami / Toronto / Atlanta' },
+      { tz: 'America/Halifax',                 name: 'Halifax' },
+      { tz: 'America/St_Johns',                name: 'St. Johns / Newfoundland' },
+      { tz: 'America/Sao_Paulo',               name: 'São Paulo / Brasília' },
+      { tz: 'America/Argentina/Buenos_Aires',  name: 'Buenos Aires / Montevideo' },
+      { tz: 'America/Noronha',                 name: 'Fernando de Noronha' },
+      { tz: 'Atlantic/Cape_Verde',             name: 'Kapp Verde' },
+      { tz: 'Atlantic/Azores',                 name: 'Azorene' },
+      { tz: 'UTC',                             name: 'UTC' },
+      { tz: 'Europe/London',                   name: 'London / Lisboa / Dublin' },
+      { tz: 'Europe/Paris',                    name: 'Paris / Berlin / Amsterdam / Roma / Madrid' },
+      { tz: 'Europe/Oslo',                     name: 'Oslo (Default)' },
+      { tz: 'Europe/Helsinki',                 name: 'Helsinki / Tallinn / Riga / Kyiv' },
+      { tz: 'Europe/Istanbul',                 name: 'Istanbul / Ankara' },
+      { tz: 'Europe/Moscow',                   name: 'Moskva' },
+      { tz: 'Asia/Tehran',                     name: 'Teheran' },
+      { tz: 'Asia/Dubai',                      name: 'Dubai / Abu Dhabi' },
+      { tz: 'Asia/Kabul',                      name: 'Kabul' },
+      { tz: 'Asia/Karachi',                    name: 'Karachi / Islamabad' },
+      { tz: 'Asia/Kolkata',                    name: 'India (Kolkata / Mumbai / Delhi)' },
+      { tz: 'Asia/Kathmandu',                  name: 'Katmandu' },
+      { tz: 'Asia/Dhaka',                      name: 'Dhaka / Almaty' },
+      { tz: 'Asia/Yangon',                     name: 'Yangon' },
+      { tz: 'Asia/Bangkok',                    name: 'Bangkok / Jakarta / Hanoi' },
+      { tz: 'Asia/Singapore',                  name: 'Singapore / Kuala Lumpur / Manila' },
+      { tz: 'Asia/Shanghai',                   name: 'Kina (Shanghai / Beijing / Hong Kong / Taipei)' },
+      { tz: 'Asia/Seoul',                      name: 'Seoul' },
+      { tz: 'Asia/Tokyo',                      name: 'Tokyo' },
+      { tz: 'Australia/Darwin',                name: 'Darwin' },
+      { tz: 'Australia/Adelaide',              name: 'Adelaide' },
+      { tz: 'Australia/Sydney',                name: 'Sydney / Melbourne / Brisbane' },
+      { tz: 'Pacific/Noumea',                  name: 'Ny-Kaledonien' },
+      { tz: 'Pacific/Auckland',                name: 'Auckland / Wellington' },
+      { tz: 'Pacific/Fiji',                    name: 'Fiji' },
+      { tz: 'Pacific/Tongatapu',               name: 'Tonga' },
+      { tz: 'Pacific/Kiritimati',              name: 'Kiribati (Linje-øyene)' },
+    ];
+
+    // Referansedato midt i VM for korrekt sommertidsberegning
+    const REF_DATE = new Date('2026-06-15T12:00:00Z');
+
+    function getUtcOffsetStr(tz) {
+      const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz, timeZoneName: 'shortOffset', year: 'numeric'
+      }).formatToParts(REF_DATE);
+      const tzName = parts.find(p => p.type === 'timeZoneName')?.value ?? 'UTC';
+      return tzName.replace('GMT', 'UTC');
+    }
+
+    function buildTzSelect() {
+      const sel = document.getElementById('tzSelect');
+      TIMEZONES.forEach(({ tz, name }) => {
+        const opt = document.createElement('option');
+        opt.value = tz;
+        opt.textContent = `${name} (${getUtcOffsetStr(tz)})`;
+        if (tz === 'Europe/Oslo') opt.selected = true;
+        sel.appendChild(opt);
+      });
+    }
+
+    // Alle tider i datasettet er i norsk sommertid (CEST = UTC+2).
+    // Returnerer { date: 'YYYY-MM-DD', time: 'HH:MM' } i måltidzonen.
+    function convertMatchDateTime(match, targetTz) {
+      const [h, m] = match.time.split(':').map(Number);
+      const [y, mo, d] = match.date.split('-').map(Number);
+      const utcMs = Date.UTC(y, mo - 1, d, h - 2, m); // CEST → UTC
+      const dt = new Date(utcMs);
+
+      const time = new Intl.DateTimeFormat('no-NO', {
+        hour: '2-digit', minute: '2-digit', hour12: false, timeZone: targetTz
+      }).format(dt);
+
+      // en-US gir MM/DD/YYYY — enkelt å parse
+      const [dateMo, dateD, dateY] = new Intl.DateTimeFormat('en-US', {
+        year: 'numeric', month: '2-digit', day: '2-digit', timeZone: targetTz
+      }).format(dt).split('/');
+      const date = `${dateY}-${dateMo}-${dateD}`;
+
+      return { date, time };
+    }
+
     function mondayFirstIndex(date) {
       return (date.getDay() + 6) % 7;
     }
 
-    function formatChannel(channel) {      if (channel === 'TV2') return 'TV 2';
+    function formatChannel(channel) {
+      if (channel === 'TV2') return 'TV 2';
       if (channel === 'NRK') return 'NRK';
       return '';
     }
@@ -471,12 +563,26 @@
     function render() {
       const app = document.getElementById('app');
       app.innerHTML = '';
-      [5, 6].forEach(month => renderMonth(2026, month, app));
+      const tz = document.getElementById('tzSelect').value;
+
+      // Pre-beregn dato og tid for alle kamper i valgt tidssone
+      const convertedMatches = matches.map(m => {
+        const { date, time } = convertMatchDateTime(m, tz);
+        return { ...m, displayDate: date, displayTime: time };
+      });
+
+      // Finn hvilke år-måneder som faktisk trengs (dato kan forskyves over månedsskifte)
+      const monthSet = new Set(convertedMatches.map(m => m.displayDate.slice(0, 7)));
+      [...monthSet].sort().forEach(ym => {
+        const [y, mo] = ym.split('-').map(Number);
+        renderMonth(y, mo - 1, app, convertedMatches);
+      });
+
       applyFilters();
       renderSummary();
     }
 
-    function renderMonth(year, monthIndex, container) {
+    function renderMonth(year, monthIndex, container, convertedMatches) {
       const title = document.createElement('h2');
       title.className = 'month-title';
       title.textContent = `${monthNames[monthIndex]} ${year}`;
@@ -502,26 +608,25 @@
       }
 
       for (let day = 1; day <= daysInMonth; day++) {
-        const date = `${year}-${String(monthIndex + 1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        const dateStr = `${year}-${String(monthIndex + 1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
         const dateObj = new Date(year, monthIndex, day);
         const dayEl = document.createElement('div');
-        dayEl.className = 'day';  // ← sett klassen FØRST
+        dayEl.className = 'day';
         dayEl.dataset.weekday = weekdays[mondayFirstIndex(dateObj)];
-        dayEl.innerHTML = `<div class="date">${day}</div>`;  // ← bygg innerHTML FØRST
+        dayEl.innerHTML = `<div class="date">${day}</div>`;
 
         const today = new Date();
         const isToday = today.getFullYear() === year &&
                 today.getMonth() === monthIndex &&
                 today.getDate() === day;
-
         if (isToday) {
-          dayEl.classList.add('today');                        // ← ETTER className er satt
-          dayEl.querySelector('.date').classList.add('today'); // ← ETTER innerHTML er satt
+          dayEl.classList.add('today');
+          dayEl.querySelector('.date').classList.add('today');
         }
-        
-        matches
-          .filter(m => m.date === date)
-          .sort((a,b) => a.time.localeCompare(b.time))
+
+        convertedMatches
+          .filter(m => m.displayDate === dateStr)
+          .sort((a, b) => a.displayTime.localeCompare(b.displayTime))
           .forEach(match => dayEl.appendChild(matchElement(match)));
 
         calendar.appendChild(dayEl);
@@ -538,10 +643,10 @@
       el.dataset.channel = match.channel;
       el.dataset.norway = isNorway ? 'true' : 'false';
 
-      el.innerHTML = `  <span class="time">${match.time}</span>
+      el.innerHTML = `  <span class="time">${match.displayTime}</span>
   ${match.channel !== 'none'
-              ? `<span class="channel ${match.channel}">${formatChannel(match.channel)}</span>`
-              : `<span></span>`}  <span class="teams">${match.teams}</span>
+          ? `<span class="channel ${match.channel}">${formatChannel(match.channel)}</span>`
+          : `<span></span>`}  <span class="teams">${match.teams}</span>
   <div class="meta">${match.stage} · ${match.city}</div>`;
       return el;
     }
@@ -573,6 +678,7 @@
 
     document.getElementById('search').addEventListener('input', applyFilters);
     document.getElementById('channelFilter').addEventListener('change', applyFilters);
+    document.getElementById('tzSelect').addEventListener('change', render);
     document.getElementById('norwayOnly').addEventListener('click', () => {
       norwayOnly = !norwayOnly;
       document.getElementById('norwayOnly').classList.toggle('active', norwayOnly);
@@ -581,6 +687,7 @@
     });
     document.getElementById('printBtn').addEventListener('click', () => window.print());
 
+    buildTzSelect();
     render();
   </script>
 </body>
