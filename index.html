@@ -419,7 +419,7 @@
 
   <script>
     const matches = [
-      ['2026-06-07','21:00','Marokko – NORGE','Privatlandskamp','New York','TV2'],
+      ['2026-06-07','21:00','Marokko – NORGE','Privatlandskamp','New Jersey','TV2'],
       ['2026-06-11','21:00','Mexico – Sør-Afrika','Gruppe A','Mexico City','TV2'],
       ['2026-06-12','04:00','Sør-Korea – Tsjekkia','Gruppe A','Guadalajara','NRK'],
       ['2026-06-12','21:00','Canada – Bosnia og Herzegovina','Gruppe B','Toronto','NRK'],
@@ -722,7 +722,10 @@
       el.dataset.channel = match.channel;
       el.dataset.norway = isNorway ? 'true' : 'false';
 
-      el.innerHTML = `  <span class="time">${match.displayTime}</span>
+      const hour = parseInt(match.displayTime.split(':')[0], 10);
+      const timeIcon = hour >= 7 ? '☀️' : '🌙';
+
+      el.innerHTML = `  <span class="time">${timeIcon} ${match.displayTime}</span>
   ${match.channel !== 'none'
           ? `<span class="channel ${match.channel}">${formatChannel(match.channel)}</span>`
           : `<span></span>`}  <span class="teams">${match.teams}</span>
