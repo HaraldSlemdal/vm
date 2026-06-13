@@ -776,8 +776,16 @@
       btn.textContent = isOpen ? '⚙ Skjul innstillinger' : '⚙ Flere innstillinger';
     });
 
+    function scrollToToday() {
+      const todayEl = document.querySelector('.day.today');
+      if (todayEl) {
+        todayEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
     buildTzSelect();
     render();
+    scrollToToday();
   </script>
 </body>
 </html>
