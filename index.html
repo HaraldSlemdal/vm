@@ -41,7 +41,7 @@ main{padding:22px 18px 40px}.months{display:grid;grid-template-columns:repeat(2,
 <main class="wrap">
 <div id="months" class="months"></div>
 <section class="notes"><h3>Merknader og kilder</h3>
-<p><strong>Oppdatert 6. oktober 2026.</strong> Skedsmo G15 er synkronisert mot NFF per 6. oktober 2026. Liverpool-kampene er synkronisert mot klubbens offisielle fixtures-side per 6. oktober 2026, inkludert flere flyttede TV-tidspunkter senere på høsten. LSK-kampene er også oppdatert per 6. oktober 2026 og inkluderer både Eliteserien, cupkampen mot Sogndal og Lillestrøms egne Europa League-kamper. Enkelte kamper kan fortsatt bli flyttet senere.</p>
+<p><strong>Oppdatert 6. oktober 2026.</strong> Skedsmo G15, G16-2 og G16-3 er nå lagt inn i samme NFF-synkstruktur per 6. oktober 2026. Liverpool-kampene er synkronisert mot klubbens offisielle fixtures-side per 6. oktober 2026, inkludert flere flyttede TV-tidspunkter senere på høsten. LSK-kampene er også oppdatert per 6. oktober 2026 og inkluderer både Eliteserien, cupkampen mot Sogndal og Lillestrøms egne Europa League-kamper. Enkelte kamper kan fortsatt bli flyttet senere.</p>
 <ul>
 <li><a href="https://www.liverpoolfc.com/fixtures/mens/2026" target="_blank">Liverpool FC – fixtures / kamper 2026/27</a></li>
 <li><a href="https://www.lsk.no/terminliste" target="_blank">Lillestrøm SK – terminliste</a></li>
@@ -77,6 +77,28 @@ const officialSkedsmoG15=[
 {"date":"2026-10-14","title":"Dal – Skedsmo","cat":"skedsmo","time":"19:00","note":"G15 1. div Høst • Dal kunstgress","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"},
 {"date":"2026-10-17","title":"Skedsmo – Dal","cat":"skedsmo","time":"15:00","note":"G15 1. div Høst • Skedsmo stadion kg","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"},
 {"date":"2026-10-24","title":"Eidsvold TF – Skedsmo","cat":"skedsmo","time":"15:00","note":"G15 1. div Høst • Eidsvollhallen kunstgress","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"}
+];
+const officialSkedsmoG162=[
+{"date":"2026-08-14","title":"Rælingen 2 – Skedsmo 2","cat":"g162","time":"19:00","note":"G16 2. div. avd. B • Marikollen kunstgress • Resultat 3–1","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=71195"},
+{"date":"2026-08-17","title":"Skedsmo 2 – Løvenstad 2","cat":"g162","time":"20:30","note":"G16 2. div. avd. B • Skedsmo stadion kg • Resultat 1–1","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=71195"},
+{"date":"2026-08-23","title":"Skjetten 2 – Skedsmo 2","cat":"g162","time":"15:00","note":"G16 2. div. avd. B • Skjetten Stadion • Resultat 0–1","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=71195"},
+{"date":"2026-08-29","title":"Borgen + – Skedsmo 2","cat":"g162","time":"15:00","note":"G16 2. div. avd. B • Borgen Stadion KG • Resultat 4–4","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=71195"},
+{"date":"2026-09-05","title":"Skedsmo 2 – Lørenskog 3","cat":"g162","time":"14:30","note":"G16 2. div. avd. B • Skedsmo stadion kg","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=71195"},
+{"date":"2026-09-15","title":"Fjellhamar 2 – Skedsmo 2","cat":"g162","time":"20:15","note":"G16 2. div. avd. B • Torshov kunstgress","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=71195"},
+{"date":"2026-09-22","title":"Skedsmo 2 – Rælingen 2","cat":"g162","time":"20:30","note":"G16 2. div. avd. B • Skedsmo stadion kg","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=71195"},
+{"date":"2026-10-06","title":"Løvenstad 2 – Skedsmo 2","cat":"g162","time":"20:15","note":"G16 2. div. avd. B • Sandbekken Kunstgress","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=71195"},
+{"date":"2026-10-13","title":"Skedsmo 2 – Skjetten 2","cat":"g162","time":"20:30","note":"G16 2. div. avd. B • Skedsmo stadion kg","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=71195"},
+{"date":"2026-10-21","title":"Skedsmo 2 – Borgen +","cat":"g162","time":"20:30","note":"G16 2. div. avd. B • Skedsmo stadion kg","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=71195"},
+{"date":"2026-10-25","title":"Lørenskog 3 – Skedsmo 2","cat":"g162","time":"15:00","note":"G16 2. div. avd. B • John Carew Banen","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=71195"}
+];
+const officialSkedsmoG163=[
+{"date":"2026-08-21","title":"Strømmen – Skedsmo 3","cat":"g163","time":"18:30","note":"G16 3. div. avd. 02 • Strømmen stadion kg • Resultat 1–4","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=46915"},
+{"date":"2026-08-28","title":"Skedsmo 3 – Aurskog-Finstadbru 2","cat":"g163","time":"19:00","note":"G16 3. div. avd. 02 • Skedsmo stadion kg • Resultat 4–1","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=46915"},
+{"date":"2026-09-04","title":"Skedsmo 3 – Strømmen","cat":"g163","time":"20:00","note":"G16 3. div. avd. 02 • Strømmen stadion kg • Resultat 4–2","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=46915"},
+{"date":"2026-09-09","title":"Raumnes & Årnes – Skedsmo 3","cat":"g163","time":"18:00","note":"G16 3. div. avd. 02 • Årnes stadion gras","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=46915"},
+{"date":"2026-09-11","title":"Funnefoss/Vormsund 2 – Skedsmo 3","cat":"g163","time":"18:30","note":"G16 3. div. avd. 02 • Funnefoss kunstgress","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=46915"},
+{"date":"2026-09-23","title":"Frogner 3 – Skedsmo 3","cat":"g163","time":"20:15","note":"G16 3. div. avd. 02 • Frogner 2","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=46915"},
+{"date":"2026-10-15","title":"Enebakk – Skedsmo 3","cat":"g163","time":"20:15","note":"G16 3. div. avd. 02 • Vidotta kunstgress","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=46915"}
 ];
 const officialLiverpool=[
 {"date":"2026-08-23","title":"Newcastle United – Liverpool","cat":"lfc","time":"17:30 norsk tid","note":"Premier League.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
@@ -144,8 +166,8 @@ const officialLsk=[
 {"date":"2027-01-21","title":"Lillestrøm – Bournemouth","cat":"lsk","time":"18:45","note":"Europa League • ligafase","url":"https://www.uefa.com/uefaeuropaleague/clubs/52314--lillestrom/matches/"},
 {"date":"2027-01-28","title":"Celta Vigo – Lillestrøm","cat":"lsk","time":"21:00","note":"Europa League • ligafase","url":"https://www.uefa.com/uefaeuropaleague/clubs/52314--lillestrom/matches/"}
 ];
-for(let i=events.length-1;i>=0;i--)if(["skedsmo","lfc","lsk"].includes(events[i].cat))events.splice(i,1);
-events.push(...officialSkedsmoG15,...officialLiverpool,...officialLsk);
+for(let i=events.length-1;i>=0;i--)if(["skedsmo","g162","g163","lfc","lsk"].includes(events[i].cat))events.splice(i,1);
+events.push(...officialSkedsmoG15,...officialSkedsmoG162,...officialSkedsmoG163,...officialLiverpool,...officialLsk);
 events.sort((a,b)=>a.date.localeCompare(b.date)||String(a.time||"").localeCompare(String(b.time||""),"no")||a.title.localeCompare(b.title,"no"));
 function scrollToToday(){if(didScrollToToday)return;const today=document.querySelector(".today");if(!today)return;didScrollToToday=true;const reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;requestAnimationFrame(()=>today.scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"center",inline:"nearest"}))}
 function iso(y,m,d){return `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`}
