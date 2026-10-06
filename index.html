@@ -169,6 +169,7 @@ const officialLsk=[
 for(let i=events.length-1;i>=0;i--)if(["skedsmo","g162","g163","lfc","lsk"].includes(events[i].cat))events.splice(i,1);
 events.push(...officialSkedsmoG15,...officialSkedsmoG162,...officialSkedsmoG163,...officialLiverpool,...officialLsk);
 events.sort((a,b)=>a.date.localeCompare(b.date)||String(a.time||"").localeCompare(String(b.time||""),"no")||a.title.localeCompare(b.title,"no"));
+function syncFilterButtons(){document.querySelectorAll(".filter").forEach(btn=>btn.classList.toggle("off",!active.has(btn.dataset.cat)))}
 function scrollToToday(){if(didScrollToToday)return;const today=document.querySelector(".today");if(!today)return;didScrollToToday=true;const reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;requestAnimationFrame(()=>today.scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"center",inline:"nearest"}))}
 function iso(y,m,d){return `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`}
 function render(){const host=document.getElementById("months");host.innerHTML="";const months=[];for(let m=7;m<=11;m++)months.push([2026,m]);for(let m=0;m<=4;m++)months.push([2027,m]);
@@ -179,5 +180,5 @@ const days=new Date(y,m+1,0).getDate();for(let d=1;d<=days;d++){const key=iso(y,
 events.filter(e=>e.date===key).forEach(ev=>{const item=document.createElement("div");item.className=`event ${ev.cat} ${active.has(ev.cat)?"":"hidden-cat"}`;item.title=[ev.title,ev.time,ev.note].filter(Boolean).join(" • ");
 item.innerHTML=`<b>${ev.title}</b>${ev.time?`<div class="tm">${ev.time}</div>`:""}`;cell.appendChild(item)});grid.appendChild(cell)}
 const used=first+days;for(let i=used;i<Math.ceil(used/7)*7;i++){let e=document.createElement("div");e.className="day empty";grid.appendChild(e)}box.appendChild(grid);host.appendChild(box)});scrollToToday()}
-document.querySelectorAll(".filter").forEach(btn=>btn.addEventListener("click",()=>{const c=btn.dataset.cat;if(active.has(c)){active.delete(c);btn.classList.add("off")}else{active.add(c);btn.classList.remove("off")}render()}));render();
+document.querySelectorAll(".filter").forEach(btn=>btn.addEventListener("click",ev=>{const c=btn.dataset.cat;if(ev.altKey){active.clear();active.add(c)}else if(active.has(c)){active.delete(c)}else{active.add(c)}syncFilterButtons();render()}));syncFilterButtons();render();
 </script></body></html>
