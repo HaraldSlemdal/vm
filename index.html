@@ -6,7 +6,7 @@
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Segoe UI,Arial,sans-serif}
 header{background:#111827;color:#fff;padding:28px 24px 22px}.wrap{max-width:1500px;margin:auto}
 h1{margin:0 0 7px;font-size:clamp(25px,3vw,38px)}.subtitle{color:#c9d1dc;font-size:14px}
-.controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.filter{border:1px solid #ffffff2b;color:#fff;background:#ffffff10;padding:8px 11px;border-radius:999px;cursor:pointer;font-size:13px}
+.controls-shell{position:sticky;top:0;z-index:100;background:#111827;box-shadow:0 10px 18px #11182733}.controls{display:flex;gap:9px;flex-wrap:wrap;padding:10px 24px 8px}.filter{border:1px solid #ffffff2b;color:#fff;background:#ffffff10;padding:8px 11px;border-radius:999px;cursor:pointer;font-size:13px}
 .filter.off{opacity:.35;text-decoration:line-through}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
 main{padding:22px 18px 40px}.months{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
 .month{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 1px 4px #0000000a}
@@ -18,13 +18,14 @@ main{padding:22px 18px 40px}.months{display:grid;grid-template-columns:repeat(2,
 .hidden-cat{display:none!important}.notes{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}
 .notes h3{margin:0 0 10px}.notes p,.notes li{font-size:13px;line-height:1.5;color:#4b5563}.notes a{color:#1f4f99}.legend{display:flex;gap:14px;flex-wrap:wrap;margin:0 0 16px}.legend span{font-size:12px}
 @media(max-width:900px){.months{grid-template-columns:1fr}.day{min-height:100px}}
-@media print{header{padding:14px;background:#fff;color:#000}.subtitle,.controls,.notes{display:none}main{padding:0}.months{display:block}.month{break-inside:avoid;box-shadow:none;margin-bottom:10px}.day{min-height:78px}body{background:#fff}}
+@media print{header{padding:14px;background:#fff;color:#000}.subtitle,.controls-shell,.notes{display:none}main{padding:0}.months{display:block}.month{break-inside:avoid;box-shadow:none;margin-bottom:10px}.day{min-height:78px}body{background:#fff}}
 
-.today{background:#d1d5db !important;}
+.today{background:#d1d5db !important;scroll-margin-top:80px;}
 </style></head><body>
 <header><div class="wrap"><h1>Kalender • august 2026 – mai 2027</h1>
 <div class="subtitle">Liverpool • Lillestrøm SK • Skedsmo G15/G16 • Oppsal håndball • Lillestrømskolen / Tæruddalen ungdomsskole</div>
-<div class="controls">
+</div></header>
+<div class="controls-shell"><div class="wrap controls">
 <button class="filter" data-cat="lfc"><span class="dot" style="background:var(--lfc)"></span>Liverpool</button>
 <button class="filter" data-cat="lsk"><span class="dot" style="background:var(--lsk)"></span>Lillestrøm SK</button>
 <button class="filter" data-cat="skedsmo"><span class="dot" style="background:var(--skedsmo)"></span>Skedsmo G15</button>
@@ -36,13 +37,13 @@ main{padding:22px 18px 40px}.months{display:grid;grid-template-columns:repeat(2,
 <button class="filter" data-cat="oj202"><span class="dot" style="background:var(--oj202)"></span>Oppsal J20.2</button>
 <button class="filter" data-cat="oj18"><span class="dot" style="background:var(--oj18)"></span>Oppsal J18</button>
 <button class="filter" data-cat="school"><span class="dot" style="background:var(--school)"></span>Skole / ferie</button>
-</div></div></header>
+</div></div>
 <main class="wrap">
 <div id="months" class="months"></div>
 <section class="notes"><h3>Merknader og kilder</h3>
-<p><strong>Oppdatert 7. september 2026.</strong> Liverpool-datoer senere i sesongen kan flyttes ved TV-valg og europacup. LSK-kampene er oppdatert 31. august 2026 og inkluderer både norske kamper og Lillestrøms egne Europa League-kamper. Flere hjemlige høstkamper kan fortsatt bli flyttet når TV-oppsettet fastsettes.</p>
+<p><strong>Oppdatert 6. oktober 2026.</strong> Skedsmo G15 er synkronisert mot NFF per 6. oktober 2026. Liverpool-kampene er synkronisert mot klubbens offisielle fixtures-side per 6. oktober 2026, inkludert flere flyttede TV-tidspunkter senere på høsten. LSK-kampene er også oppdatert per 6. oktober 2026 og inkluderer både Eliteserien, cupkampen mot Sogndal og Lillestrøms egne Europa League-kamper. Enkelte kamper kan fortsatt bli flyttet senere.</p>
 <ul>
-<li><a href="https://www.liverpoolfc.com/news/revealed-liverpools-2026-27-premier-league-fixture-list" target="_blank">Liverpool FC – terminliste 2026/27</a></li>
+<li><a href="https://www.liverpoolfc.com/fixtures/mens/2026" target="_blank">Liverpool FC – fixtures / kamper 2026/27</a></li>
 <li><a href="https://www.lsk.no/terminliste" target="_blank">Lillestrøm SK – terminliste</a></li>
 <li><a href="https://www.uefa.com/uefaeuropaleague/clubs/52314--lillestrom/matches/" target="_blank">UEFA – Lillestrøm sine Europa League-kamper</a></li>
 <li><a href="https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359" target="_blank">NFF – Skedsmo G15-1 kamper</a></li>
@@ -62,6 +63,91 @@ const monthNames=["januar","februar","mars","april","mai","juni","juli","august"
 const weekdays=["Man","Tir","Ons","Tor","Fre","Lør","Søn"];
 const now=new Date();
 const todayKey=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;const active=new Set(["lfc","lsk","skedsmo","g162","g163","ok2","ok3","oj201","oj202","oj18","school"]);
+let didScrollToToday=false;
+const officialSkedsmoG15=[
+{"date":"2026-08-15","title":"Skedsmo – Frogner","cat":"skedsmo","time":"14:20","note":"G15 1. div Høst • Skedsmo stadion kg • Resultat 0–3","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"},
+{"date":"2026-08-19","title":"Lillestrøm – Skedsmo","cat":"skedsmo","time":"18:00","note":"G15 1. div Høst • Lillestrøm 3 kunstgress • Resultat 3–2","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"},
+{"date":"2026-08-25","title":"Lørenskog 2 – Skedsmo","cat":"skedsmo","time":"20:30","note":"G15 1. div Høst • John Carew Banen • Resultat 1–2","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"},
+{"date":"2026-09-06","title":"Skedsmo – Eidsvold TF","cat":"skedsmo","time":"11:00","note":"G15 1. div Høst • Skedsmo stadion kg • Resultat 0–1","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"},
+{"date":"2026-09-13","title":"Lørenskog – Skedsmo","cat":"skedsmo","time":"14:30","note":"G15 1. div Høst • Rolvsrud kunstgress • Resultat 10–2","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"},
+{"date":"2026-09-18","title":"Skedsmo – Lillestrøm","cat":"skedsmo","time":"19:00","note":"G15 1. div Høst • Skedsmo stadion kg • Resultat 1–2","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"},
+{"date":"2026-09-29","title":"Skedsmo – Fet","cat":"skedsmo","time":"16:45","note":"G15 1. div Høst • Fedrelandet kunstgress • Resultat 2–5","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"},
+{"date":"2026-10-03","title":"Skedsmo – Lørenskog 2","cat":"skedsmo","time":"15:00","note":"G15 1. div Høst • Skedsmo stadion kg • Resultat 10–2","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"},
+{"date":"2026-10-10","title":"Fet – Skedsmo","cat":"skedsmo","time":"15:00","note":"G15 1. div Høst • Fedrelandet kunstgress","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"},
+{"date":"2026-10-14","title":"Dal – Skedsmo","cat":"skedsmo","time":"19:00","note":"G15 1. div Høst • Dal kunstgress","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"},
+{"date":"2026-10-17","title":"Skedsmo – Dal","cat":"skedsmo","time":"15:00","note":"G15 1. div Høst • Skedsmo stadion kg","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"},
+{"date":"2026-10-24","title":"Eidsvold TF – Skedsmo","cat":"skedsmo","time":"15:00","note":"G15 1. div Høst • Eidsvollhallen kunstgress","url":"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=120359"}
+];
+const officialLiverpool=[
+{"date":"2026-08-23","title":"Newcastle United – Liverpool","cat":"lfc","time":"17:30 norsk tid","note":"Premier League.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-08-29","title":"Liverpool – Nottingham Forest","cat":"lfc","time":"13:30 norsk tid","note":"Premier League.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-09-04","title":"Ipswich Town – Liverpool","cat":"lfc","time":"21:00 norsk tid","note":"Premier League.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-09-12","title":"Liverpool – Fulham","cat":"lfc","time":"16:00 norsk tid","note":"Premier League.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-09-20","title":"AFC Bournemouth – Liverpool","cat":"lfc","time":"15:00 norsk tid","note":"Premier League.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-10-11","title":"Liverpool – Manchester City","cat":"lfc","time":"17:30 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-10-17","title":"Brentford – Liverpool","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-10-25","title":"Liverpool – Brighton","cat":"lfc","time":"15:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-11-01","title":"Liverpool – Arsenal","cat":"lfc","time":"17:30 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-11-08","title":"Crystal Palace – Liverpool","cat":"lfc","time":"15:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-11-22","title":"Liverpool – Manchester United","cat":"lfc","time":"17:30 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-11-29","title":"Everton – Liverpool","cat":"lfc","time":"13:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-12-02","title":"Liverpool – Sunderland","cat":"lfc","time":"21:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-12-05","title":"Chelsea – Liverpool","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-12-12","title":"Liverpool – Leeds United","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-12-19","title":"Liverpool – Tottenham","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-12-26","title":"Hull City – Liverpool","cat":"lfc","time":"18:30 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2026-12-30","title":"Aston Villa – Liverpool","cat":"lfc","time":"21:15 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-01-02","title":"Liverpool – Coventry City","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-01-05","title":"Sunderland – Liverpool","cat":"lfc","time":"21:15 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-01-16","title":"Liverpool – Crystal Palace","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-01-23","title":"Manchester United – Liverpool","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-01-30","title":"Liverpool – Everton","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-02-06","title":"Arsenal – Liverpool","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-02-10","title":"Coventry City – Liverpool","cat":"lfc","time":"21:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-02-20","title":"Liverpool – Hull City","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-02-27","title":"Tottenham – Liverpool","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-03-03","title":"Liverpool – Aston Villa","cat":"lfc","time":"21:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-03-13","title":"Liverpool – Ipswich Town","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-03-20","title":"Fulham – Liverpool","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-04-10","title":"Liverpool – Newcastle United","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-04-17","title":"Nottingham Forest – Liverpool","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-04-24","title":"Leeds United – Liverpool","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-05-01","title":"Liverpool – Chelsea","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-05-08","title":"Manchester City – Liverpool","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-05-15","title":"Liverpool – Brentford","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-05-23","title":"Brighton – Liverpool","cat":"lfc","time":"16:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"},
+{"date":"2027-05-30","title":"Liverpool – AFC Bournemouth","cat":"lfc","time":"17:00 norsk tid","note":"Premier League. Dato/tid kan endres.","url":"https://www.liverpoolfc.com/fixtures/mens/2026"}
+];
+const officialLsk=[
+{"date":"2026-08-20","title":"Egnatia – Lillestrøm","cat":"lsk","time":"","note":"Europa League playoff • 0–0","url":"https://www.uefa.com/uefaeuropaleague/clubs/52314--lillestrom/matches/"},
+{"date":"2026-08-27","title":"Lillestrøm – Egnatia","cat":"lsk","time":"","note":"Europa League playoff • 2–1 e.e.o. • LSK videre 2–1 sammenlagt","url":"https://www.uefa.com/uefaeuropaleague/clubs/52314--lillestrom/matches/"},
+{"date":"2026-09-02","title":"Aurskog-Finstadbru – Lillestrøm","cat":"lsk","time":"18:00","note":"NM menn 2027 • Aursmoen kunstgress","url":"https://www.lsk.no/terminliste"},
+{"date":"2026-09-05","title":"Brann – Lillestrøm","cat":"lsk","time":"18:00","note":"Eliteserien • Brann stadion","url":"https://www.lsk.no/terminliste"},
+{"date":"2026-09-12","title":"Lillestrøm – Vålerenga","cat":"lsk","time":"16:00","note":"Eliteserien • Åråsen stadion","url":"https://www.lsk.no/terminliste"},
+{"date":"2026-09-17","title":"Lillestrøm – Torreense","cat":"lsk","time":"21:00","note":"Europa League • ligafase","url":"https://www.uefa.com/uefaeuropaleague/clubs/52314--lillestrom/matches/"},
+{"date":"2026-09-20","title":"Viking – Lillestrøm","cat":"lsk","time":"17:00","note":"Eliteserien • Lyse Arena","url":"https://www.lsk.no/terminliste"},
+{"date":"2026-10-11","title":"Lillestrøm – Molde","cat":"lsk","time":"19:15","note":"Eliteserien • Åråsen stadion","url":"https://www.lsk.no/terminliste"},
+{"date":"2026-10-15","title":"Sparta Praha – Lillestrøm","cat":"lsk","time":"18:45","note":"Europa League • ligafase","url":"https://www.uefa.com/uefaeuropaleague/clubs/52314--lillestrom/matches/"},
+{"date":"2026-10-18","title":"Sandefjord Fotball – Lillestrøm","cat":"lsk","time":"17:00","note":"Eliteserien • Jotun Arena","url":"https://www.lsk.no/terminliste"},
+{"date":"2026-10-22","title":"Lillestrøm – Real Sociedad","cat":"lsk","time":"21:00","note":"Europa League • ligafase","url":"https://www.uefa.com/uefaeuropaleague/clubs/52314--lillestrom/matches/"},
+{"date":"2026-10-25","title":"Lillestrøm – Brann","cat":"lsk","time":"17:00","note":"Eliteserien • Åråsen stadion","url":"https://www.lsk.no/terminliste"},
+{"date":"2026-10-28","title":"Lillestrøm – Sogndal","cat":"lsk","time":"18:00","note":"NM menn 2027 • Åråsen stadion","url":"https://www.lsk.no/terminliste"},
+{"date":"2026-11-01","title":"Start – Lillestrøm","cat":"lsk","time":"17:00","note":"Eliteserien • Sparebanken Norge Arena Kristiansand","url":"https://www.lsk.no/terminliste"},
+{"date":"2026-11-05","title":"Lillestrøm – Viktoria Plzeň","cat":"lsk","time":"18:45","note":"Europa League • ligafase","url":"https://www.uefa.com/uefaeuropaleague/clubs/52314--lillestrom/matches/"},
+{"date":"2026-11-08","title":"Lillestrøm – Aalesund","cat":"lsk","time":"17:00","note":"Eliteserien • Åråsen stadion","url":"https://www.lsk.no/terminliste"},
+{"date":"2026-11-22","title":"Sarpsborg 08 – Lillestrøm","cat":"lsk","time":"19:15","note":"Eliteserien • Sarpsborg st KG","url":"https://www.lsk.no/terminliste"},
+{"date":"2026-11-26","title":"Lyon – Lillestrøm","cat":"lsk","time":"21:00","note":"Europa League • ligafase","url":"https://www.uefa.com/uefaeuropaleague/clubs/52314--lillestrom/matches/"},
+{"date":"2026-11-30","title":"Lillestrøm – HamKam","cat":"lsk","time":"19:00","note":"Eliteserien • Åråsen stadion","url":"https://www.lsk.no/terminliste"},
+{"date":"2026-12-06","title":"Kristiansund – Lillestrøm","cat":"lsk","time":"17:00","note":"Eliteserien • Nordmøre stadion","url":"https://www.lsk.no/terminliste"},
+{"date":"2026-12-10","title":"Levski Sofia – Lillestrøm","cat":"lsk","time":"21:00","note":"Europa League • ligafase","url":"https://www.uefa.com/uefaeuropaleague/clubs/52314--lillestrom/matches/"},
+{"date":"2026-12-13","title":"Lillestrøm – Tromsø","cat":"lsk","time":"17:00","note":"Eliteserien • Åråsen stadion","url":"https://www.lsk.no/terminliste"},
+{"date":"2027-01-21","title":"Lillestrøm – Bournemouth","cat":"lsk","time":"18:45","note":"Europa League • ligafase","url":"https://www.uefa.com/uefaeuropaleague/clubs/52314--lillestrom/matches/"},
+{"date":"2027-01-28","title":"Celta Vigo – Lillestrøm","cat":"lsk","time":"21:00","note":"Europa League • ligafase","url":"https://www.uefa.com/uefaeuropaleague/clubs/52314--lillestrom/matches/"}
+];
+for(let i=events.length-1;i>=0;i--)if(["skedsmo","lfc","lsk"].includes(events[i].cat))events.splice(i,1);
+events.push(...officialSkedsmoG15,...officialLiverpool,...officialLsk);
+events.sort((a,b)=>a.date.localeCompare(b.date)||String(a.time||"").localeCompare(String(b.time||""),"no")||a.title.localeCompare(b.title,"no"));
+function scrollToToday(){if(didScrollToToday)return;const today=document.querySelector(".today");if(!today)return;didScrollToToday=true;const reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;requestAnimationFrame(()=>today.scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"center",inline:"nearest"}))}
 function iso(y,m,d){return `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`}
 function render(){const host=document.getElementById("months");host.innerHTML="";const months=[];for(let m=7;m<=11;m++)months.push([2026,m]);for(let m=0;m<=4;m++)months.push([2027,m]);
 months.forEach(([y,m])=>{const box=document.createElement("section");box.className="month";box.innerHTML=`<h2>${monthNames[m][0].toUpperCase()+monthNames[m].slice(1)} ${y}</h2>`;
@@ -70,6 +156,6 @@ const grid=document.createElement("div");grid.className="grid";let first=(new Da
 const days=new Date(y,m+1,0).getDate();for(let d=1;d<=days;d++){const key=iso(y,m,d),cell=document.createElement("div");cell.className="day";if(key===todayKey)cell.classList.add("today");cell.innerHTML=`<div class="num">${d}</div>`;
 events.filter(e=>e.date===key).forEach(ev=>{const item=document.createElement("div");item.className=`event ${ev.cat} ${active.has(ev.cat)?"":"hidden-cat"}`;item.title=[ev.title,ev.time,ev.note].filter(Boolean).join(" • ");
 item.innerHTML=`<b>${ev.title}</b>${ev.time?`<div class="tm">${ev.time}</div>`:""}`;cell.appendChild(item)});grid.appendChild(cell)}
-const used=first+days;for(let i=used;i<Math.ceil(used/7)*7;i++){let e=document.createElement("div");e.className="day empty";grid.appendChild(e)}box.appendChild(grid);host.appendChild(box)})}
+const used=first+days;for(let i=used;i<Math.ceil(used/7)*7;i++){let e=document.createElement("div");e.className="day empty";grid.appendChild(e)}box.appendChild(grid);host.appendChild(box)});scrollToToday()}
 document.querySelectorAll(".filter").forEach(btn=>btn.addEventListener("click",()=>{const c=btn.dataset.cat;if(active.has(c)){active.delete(c);btn.classList.add("off")}else{active.add(c);btn.classList.remove("off")}render()}));render();
 </script></body></html>
